@@ -4,13 +4,25 @@
   "description": "Simple file structure for Tailwind projects",
   "main": "index.js",
   "scripts": {
-    "watch": "npx @tailwindcss/cli -i ./input.css -o ./css/style.css --watch",
-    "build": "npx @tailwindcss/cli -i ./input.css -o ./css/style.css"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "watch": "npx @tailwindcss/cli -i ./public/input.css -o ./public/css/style.css --watch",
+    "build": "npx @tailwindcss/cli -i ./public/input.css -o ./public/css/style.css"
   },
   "author": "Brad Traversy",
   "license": "MIT",
   "devDependencies": {
     "@tailwindcss/cli": "^4.0.12",
     "tailwindcss": "^4.0.12"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs": "^2.0.0",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.14.1",
+    "nodemon": "^3.1.10",
+    "python3": "^0.0.1"
   }
 }
