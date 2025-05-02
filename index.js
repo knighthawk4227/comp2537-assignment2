@@ -5,7 +5,7 @@ require('dotenv').config();
 const users = require('./models/user.js');
 
 
-mongoose.connect(process.env.DATABASE_URL)
+mongoose.connect(process.env.DATABASE_URI)
 
 const app = express()
 const PORT = process.env.PORT || 3000;
