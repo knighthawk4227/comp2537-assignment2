@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <title>Document</title>
+
+</head>
+
+<body class="bg-orange-600">
+  <div class="bg-indigo-700 text-9xl text-red-700">
+    <h1> Hello, <%= user.username %>
+    </h1>
+  </div>
+  <div> <img src="/photos/dumbledore.jpg" alt="">photo</div>
+  <div> <img src="/photos/harryPotter.jpg" alt=""></div>
+  <div> <img src="/photos/catWizard.jpg" alt=""></div>
+  <form action="/logout" method="post">
+    <div class="flex mt-5 w-full left-5">
+      <button
+        class="border-2 border-yellow-700 bg-blue-700 text-orange-500 py-1 px-4 rounded-md hover:bg-green-700 hover:text-black font-semibold">
+        logout? </button>
+    </div>
+  </form>
+</body>
+
+</html>
