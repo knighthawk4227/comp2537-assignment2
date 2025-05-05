@@ -135,6 +135,11 @@ app.post('/signup', async (req, res) => {
     }
     // if password is okay make them an account wiht that username and pass.
     users.collection.insertOne({ email: email, username: user, password: cryptPass })
+    req.session.user = {
+        username: user.username,
+        //idk what I should save
+        _id: user._id,
+    }
     res.redirect('/');
 });
 
@@ -147,6 +152,9 @@ app.post('/logout', (req, res) => {
     });
 });
 
+app.use((req, res) => {
+    res.status(404).send('No page here man 404');
+});
 
 app.listen(PORT, () => {
     console.log(`app is listening on ${PORT}`)
