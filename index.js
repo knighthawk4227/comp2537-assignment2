@@ -4,6 +4,7 @@ const session = require('express-session');
 require('dotenv').config();
 const users = require('./models/user.js');
 const bcrypt = require('bcrypt');
+const joi = require('joi');
 
 //strength of password hash
 const saltRounds = 10;
@@ -26,7 +27,7 @@ app.set('views', './views');
 
 //express session 
 app.use(session({
-    secret: 'dog',
+    secret: process.env.NODE_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -38,7 +39,6 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(express.static('public'));
-app.use(express.static('photos'));
 // users.collection.insertOne({ "username": "mitchell", "password": "123456" });
 // importing user routes/ making instance of
 const userRoutes = require('./routes/userRoutes')
@@ -56,9 +56,18 @@ app.get('/members', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
     }
+    const arr = ['dumbledore.jpg', 'harryPotter.jpg', 'catWizard.jpg'];
+    const index = Math.floor(Math.random() * arr.length);
+    let path = arr[index];
+    console.log(`photo/${path}`);
     res.set('Cache-Control', 'no-store');
-    res.render('members', { user: req.session.user });
+    res.render('members',
+        {
+            user: req.session.user,
+            path: path,
+        });
 });
+
 app.get('/login', (req, res) => {
     //save error in variable then wipe it so that we can refresh 
     //and error isn't constantly passed to ejs
@@ -74,8 +83,17 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    const user = await users.findOne({ username: username });
+    const userSchema = joi.object({
+        email: joi.string().email().required(),
+        password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+    });
+    const { error, value } = userSchema.validate(req.body);
+    if (error) {
+        req.session.error = 'not valid input man';
+        return res.redirect('/login');
+    }
+    const { email, password } = value;
+    const user = await users.findOne({ email: email });
     if (!user) {
         req.session.error = 'No user by that'
         return res.redirect('/login');
@@ -92,13 +110,22 @@ app.post('/login', async (req, res) => {
         _id: user._id,
     }
     res.redirect('/members');
-
 });
 
 app.post('/signup', async (req, res) => {
-    const { username, password, repass } = req.body;
-
-    console.log("signup stuff", { username, password, repass });
+    const userSchema = joi.object({
+        email: joi.string().email().required(),
+        username: joi.string().alphanum().min(3).max(30).required(),
+        password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+        repass: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+    });
+    const { error, value } = userSchema.validate(req.body);
+    if (error) {
+        req.session.error = 'not valid';
+        return res.redirect('/signup');
+    }
+    const { email, username, password, repass } = value;
+    console.log("signup stuff", value);
     const user = username;
     const cryptPass = await bcrypt.hash(password, saltRounds);
     console.log("The cryptword is ", cryptPass);
@@ -107,9 +134,8 @@ app.post('/signup', async (req, res) => {
         return res.redirect('/signup');
     }
     // if password is okay make them an account wiht that username and pass.
-    users.collection.insertOne({ username: user, password: cryptPass })
+    users.collection.insertOne({ email: email, username: user, password: cryptPass })
     res.redirect('/');
-
 });
 
 app.post('/logout', (req, res) => {
@@ -117,7 +143,7 @@ app.post('/logout', (req, res) => {
         if (err) {
             return res.redirect('/');
         }
-        return res.redirect('/login')
+        return res.redirect('/')
     });
 });
 

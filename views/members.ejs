@@ -15,9 +15,7 @@
     <h1> Hello, <%= user.username %>
     </h1>
   </div>
-  <div> <img src="/photos/dumbledore.jpg" alt="">photo</div>
-  <div> <img src="/photos/harryPotter.jpg" alt=""></div>
-  <div> <img src="/photos/catWizard.jpg" alt=""></div>
+  <div> <img src='/photos/<%=path %>' alt="">photo</div>
   <form action="/logout" method="post">
     <div class="flex mt-5 w-full left-5">
       <button
