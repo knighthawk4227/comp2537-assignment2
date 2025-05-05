@@ -47,9 +47,11 @@ app.use(userRoutes);
 
 app.get('/', (req, res) => {
     if (req.session.user) {
-
+        req.session.person = 'here';
     }
-    res.render('home');
+    res.render('home', {
+        person: req.session.person,
+    });
 });
 
 app.get('/members', (req, res) => {

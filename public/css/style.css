@@ -188,6 +188,9 @@
   }
 }
 @layer utilities {
+  .left-5 {
+    left: calc(var(--spacing) * 5);
+  }
   .mx-auto {
     margin-inline: auto;
   }
@@ -208,9 +211,6 @@
   }
   .flex {
     display: flex;
-  }
-  .hidden {
-    display: none;
   }
   .h-screen {
     height: 100vh;
@@ -340,6 +340,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-green-700);
+      }
+    }
+  }
+  .hover\:bg-indigo-700 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-indigo-700);
       }
     }
   }
