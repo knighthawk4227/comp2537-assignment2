@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const mongoSession = require('connect-mongodb-session')(session);
 require('dotenv').config();
 const users = require('./models/user.js');
 const bcrypt = require('bcrypt');
@@ -11,13 +12,16 @@ const saltRounds = 10;
 mongoose.connect(process.env.DATABASE_URI)
 
 const app = express()
+let store = new mongoSession({
+    uri: process.env.DATABASE_URI,
+    collection: 'sessions'
+});
 const PORT = process.env.PORT || 3000;
 
 bcrypt.genSalt(saltRounds, (err, salt) => {
     if (err) {
         console.log("SAD ERROR CRY SAD");
     }
-
 });
 
 //makes ejs the template engine???
@@ -34,6 +38,7 @@ app.use(session({
         secure: false,
         maxAge: 60000 * 60,
     },
+    store: store,
 }));
 
 app.use(express.urlencoded({ extended: true }))
@@ -61,7 +66,6 @@ app.get('/members', (req, res) => {
     const arr = ['dumbledore.jpg', 'harryPotter.jpg', 'catWizard.jpg'];
     const index = Math.floor(Math.random() * arr.length);
     let path = arr[index];
-    console.log(`photo/${path}`);
     res.set('Cache-Control', 'no-store');
     res.render('members',
         {
@@ -111,6 +115,7 @@ app.post('/login', async (req, res) => {
         //idk what I should save
         _id: user._id,
     }
+    console.log(req.session.user);
     res.redirect('/members');
 });
 
@@ -119,7 +124,8 @@ app.post('/signup', async (req, res) => {
         email: joi.string().email().required(),
         username: joi.string().alphanum().min(3).max(30).required(),
         password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-        repass: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+        //literally passes password and checks if it matches
+        repass: joi.ref('password'),
     });
     const { error, value } = userSchema.validate(req.body);
     if (error) {
@@ -136,11 +142,11 @@ app.post('/signup', async (req, res) => {
         return res.redirect('/signup');
     }
     // if password is okay make them an account wiht that username and pass.
-    users.collection.insertOne({ email: email, username: user, password: cryptPass })
+    const person = await users.collection.insertOne({ email: email, username: user, password: cryptPass })
     req.session.user = {
-        username: user.username,
+        username: user,
         //idk what I should save
-        _id: user._id,
+        id: person.insertedId,
     }
     res.redirect('/');
 });
