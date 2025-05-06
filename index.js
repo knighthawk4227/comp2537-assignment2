@@ -52,7 +52,7 @@ app.use(userRoutes);
 
 app.get('/', (req, res) => {
     if (req.session.user) {
-        req.session.person = 'here';
+        // req.session.person = 'here';
     }
     res.render('home', {
         person: req.session.person,
