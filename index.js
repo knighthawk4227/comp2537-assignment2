@@ -33,7 +33,7 @@ app.set('views', './views');
 app.use(session({
     secret: process.env.NODE_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         secure: false,
         maxAge: 60000 * 60,
@@ -149,7 +149,7 @@ app.post('/signup', async (req, res) => {
         id: person.insertedId,
     }
     req.session.save();
-    res.redirect('/');
+    res.redirect('/members');
 });
 
 app.post('/logout', async (req, res) => {
