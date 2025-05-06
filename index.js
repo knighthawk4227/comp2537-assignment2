@@ -113,7 +113,7 @@ app.post('/login', async (req, res) => {
     req.session.user = {
         username: user.username,
         //idk what I should save
-        _id: user._id,
+        person: user._id,
     }
     console.log(req.session.user);
     res.redirect('/members');
