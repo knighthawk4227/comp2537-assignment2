@@ -148,6 +148,7 @@ app.post('/signup', async (req, res) => {
         //idk what I should save
         id: person.insertedId,
     }
+    req.session.save();
     res.redirect('/');
 });
 
