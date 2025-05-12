@@ -99,7 +99,7 @@ app.get('/admin', async (req, res) => {
         return res.redirect('/login');
     }
     if (req.session.user.role !== 'admin') {
-        return res.status(403).send('NOT ADMIN ');
+        return res.status(403).send('NOT ADMIN 403');
     }
     console.log(req.session.user.role);
     try {
@@ -245,7 +245,12 @@ app.post('/giveRole', async (req, res) => {
 });
 
 app.use((req, res) => {
-    res.status(404).send('No page here man 404');
+    res.status(404);
+    res.render('404', {
+        person: req.session.user ? 'here' : undefined,
+        page: 404,
+    });
+
 });
 
 app.listen(PORT, () => {
