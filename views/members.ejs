@@ -1,5 +1,5 @@
 <%- include('./partials/header.ejs') %>
-  <main class="max-w-screen-xl mx-auto px-6 py-12">
+  <main class="flex-grow max-w-screen-xl mx-auto px-6 py-12">
     <h1 class="text-3xl font-bold text-center mb-8">Welcome, <%= user.username %>
     </h1>
 
@@ -16,12 +16,4 @@
 
     </div>
   </main>
-  <div>
-    <form action="/logout" method="post"> <button
-        class="border-2 border-yellow-700 bg-blue-700 text-orange-500 py-1 px-4 rounded-md hover:bg-green-700 hover:text-black font-semibold">
-        logout? </button>
-  </div>
-  </form>
-  </body>
-
-  </html>
+  <%- include('./partials/footer.ejs') %>
