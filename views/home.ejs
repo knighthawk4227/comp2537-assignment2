@@ -1,48 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home page</title>
-  <link rel="stylesheet" href="/css/style.css" <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="../public/css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" </head>
-
-<body>
-  <div class="justify-items-center"></div>
-  <div class="align-middle flex text-blue-600">
-    This is the home page I didn't want to make it. :)
-    <br>
-  </div>
-  <% if (typeof person==='undefined' ) { %>
-    <div class="flex mt-5 w-full justify-center">
-      <a href="/login"
-        class="border-2 border-yellow-700 bg-blue-700 text-orange-500 py-1 px-4 rounded-md hover:bg-green-700 hover:text-black font-semibold">
-        Sign in ? </a>
+<%- include('./partials/header.ejs') %>
+  <main class="flex-grow">
+    <div class="justify-items-center"></div>
+    <div class="align-middle flex text-blue-600">
+      This is the home page I didn't want to make it. :)
+      <br>
     </div>
-    <div class="flex mt-5 w-full justify-center">
-      <a href="/signup"
-        class="border-2 border-yellow-700 bg-blue-700  py-1 px-4 rounded-md hover:bg-indigo-700 hover:text-black font-semibold">
-        Signup ??? </a>
-    </div>
-    <% } %>
-      <% if (person==='here' ) { %>
-        <form action="/logout" method="post">
-          <div class="flex mt-5 w-full justify-center">
-            <button
-              class="border-2 border-yellow-700 bg-blue-700 text-orange-500 py-1 px-4 rounded-md hover:bg-green-700 hover:text-black font-semibold">
-              logout? </button>
-          </div>
-        </form>
-        <div class="flex justify-center w-full mt-10">
-          <div class=" block mx-auto">
-            <a href="./members" class="border-2 border-yellow-600 bg-green-700 text-white py-1 px-7 rounded-md">Members
-              only</a>
-          </div>
-        </div>
-        <% } %>
-</body>
-
-</html>
+  </main>
+  <%- include('./partials/footer.ejs') %>
